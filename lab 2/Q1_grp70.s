@@ -55,8 +55,8 @@ main:
     blt		$s1, $t1, out_of_range_error    # if $s1 < $t1 then error (n2 greater than lowerbound)
     
     # call booth's multiplication algorithm
-    move    $a0,$s0                         # initializing value of M = n1 stored in $s0 into $a0
-    move    $a1,$s1                         # initializing value of A = n2 stored in $s1 into $a1
+    move    $a0,$s1                         # initializing value of M = n2 stored in $s0 into $a0
+    move    $a1,$s0                         # initializing value of A = n1 stored in $s1 into $a1
     jal     multiply_booth                  # link and jump to multiply_booth
 
     # store product in s2
@@ -86,9 +86,9 @@ end:
 
 
 # multiply_booth : Program Variables -
-# M (left shit n1 by 16) : $a0 
+# M : $a0 
 # Accumulator (A) : $a1
-# -M : $a2
+# -M : $a2  --> Not used anymore
 # count (16) : $t0
 # Q_0 : $t1
 # Q_-1 : $t2
@@ -97,13 +97,10 @@ end:
 multiply_booth:
 
     li      $t4,1                           # initializing MASK = 1
+    # Making First 16 bits of MASK 0
     sll     $t4,$t4,16                      # MASK = MASK << 16 (MASK = 2^16))
     addi    $t4,$t4,-1                      # MASK = MASK - 1 (first 16 bits will be 0 and last 16 bits will be 1)
-
-    
     sll		$a0, $a0, 16			        # $a0 = $a0 << 16 , left shift M by 16 bits
-    
-    
     # and of MASK and a1
     and     $a1,$a1,$t4                     # to ensure first 16 bits of A are 0
 
