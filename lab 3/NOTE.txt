@@ -1,0 +1,14 @@
+Group 70:
+20CS30024 Jay Kumar Thakur
+20CS30030 Kushaz Sehgal
+
+For Designing n-bit Ripple Carry Adder the output carry has the value 2^n
+	if two n bit numbers sums up to 2^n then sum_output = 0 and carry_ouput = 1
+
+the Full Adder and the Half Adder Has been Created Seperately and both the adders
+are working correctly
+
+8-bit adder is implemented with 8 seperate Full Adders
+16-bit adder is implemented with two 8 bit adders
+32-bit adder is implemented with two 16 bit adders
+64-bit adder is implemented with two 32 bit adders
