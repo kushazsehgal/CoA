@@ -8,7 +8,7 @@
 // Jay Kumar Thakur - 20CS30024
 ////////////////////////////////////////////////////////
 
-module CLA_4bit_Test;
+module CLA_4bit_augmented_Test;
 
 	// Inputs
 	reg [3:0] a;
@@ -17,19 +17,21 @@ module CLA_4bit_Test;
 
 	// Outputs
 	wire [3:0] S;
-	wire C;
+	wire P;
+	wire G;
 
 	// Instantiate the Unit Under Test (UUT)
-	CLA_4bit uut (
+	CLA_4bit_augmented uut (
 		.a(a), 
 		.b(b), 
 		.c(c), 
 		.S(S), 
-		.C(C)
+		.P(P), 
+		.G(G)
 	);
 
 	initial begin
-		$monitor ("a = %d, b = %d, c = %d, S = %d, C = %d", a, b, c, S, C);
+		$monitor ("a = %d, b = %d, c = %d, S = %d, P = %d, G = %d", a, b, c, S, P, G);
 		// Initialize Inputs
 
 		a = 4'd15; b = 4'd0; c = 0; // S = 15 C = 0
