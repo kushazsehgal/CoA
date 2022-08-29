@@ -2,7 +2,7 @@
 
 ////////////////////////////////////////////////////////
 // Assignment 3 - CS31001
-// Implementing Carry Look Ahead Adder
+// Implementing 4 bitCarry Look Ahead Adder
 // Team Details - 
 // Kushaz Sehgal - 20CS30030
 // Jay Kumar Thakur - 20CS30024

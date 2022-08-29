@@ -2,7 +2,7 @@
 
 ////////////////////////////////////////////////////////
 // Assignment 3 - CS31001
-// Testing 4 bit Look Ahead Carry Adder
+// Implementing 4 bit augmented Look Ahead Carry Adder
 // Team Details - 
 // Kushaz Sehgal - 20CS30030
 // Jay Kumar Thakur - 20CS30024
@@ -25,6 +25,7 @@ module CLA_4bit_augmented(a, b, c, S, P, G);
 	assign carry[0] = c;
 	assign carry[1] = g[0] | (p[0] & c);
 	assign carry[2] = g[1] | (p[1] & g[0]) | (p[1] & p[0] & c);
+	// assign carry[2] = g[1] | (p[1] & (g[0] | (p[0] & c));
 	assign carry[3] = g[2] | (p[2] & g[1]) | (p[2] & p[1] & g[0]) | (p[2] & p[1] & p[0] & c);
 	
 	// calculate final S using propagate and carries

@@ -2,7 +2,7 @@
 
 ////////////////////////////////////////////////////////
 // Assignment 3 - CS31001
-// Testing 8 bit Ripple Carry Adder
+// Implementing 16 bit ripple Carry Look Ahead Adder
 // Team Details - 
 // Kushaz Sehgal - 20CS30030
 // Jay Kumar Thakur - 20CS30024

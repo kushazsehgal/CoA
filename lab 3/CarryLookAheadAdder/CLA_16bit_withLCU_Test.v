@@ -2,13 +2,13 @@
 
 ////////////////////////////////////////////////////////
 // Assignment 3 - CS31001
-// Testing 16 bit ripple Carry Look Ahead Adder
+// Testing 16 bit Look Ahead Carry Adder
 // Team Details - 
 // Kushaz Sehgal - 20CS30030
 // Jay Kumar Thakur - 20CS30024
 ////////////////////////////////////////////////////////
 
-module LCA_16bit_ripple_Test;
+module CLA_16bit_withLCU_Test;
 
 	// Inputs
 	reg [15:0] a;
@@ -18,18 +18,22 @@ module LCA_16bit_ripple_Test;
 	// Outputs
 	wire [15:0] S;
 	wire C;
+	wire P;
+	wire G;
 
 	// Instantiate the Unit Under Test (UUT)
-	LCA_16bit_ripple uut (
+	CLA_16bit_withLCU uut (
 		.a(a), 
 		.b(b), 
 		.c(c), 
 		.S(S), 
-		.C(C)
+		.C(C), 
+		.P(P), 
+		.G(G)
 	);
 
 	initial begin
-		$monitor ("a = %d, b = %d, c = %d, S = %d, C = %d", a, b, c, S, C);
+		$monitor ("a = %d, b = %d, c = %d, S = %d, C = %d, P = %d, G = %d", a, b, c, S, C, P, G);
 		// Initialize Inputs
 
 		a = 16'd65500; b = 16'd36; c = 0; // S = 0 C = 1
