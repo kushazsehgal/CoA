@@ -6,17 +6,16 @@
 # Jay Kumar Thakur  20CS30024
 ###################################################################
 
-# Declaring String Prompts
     .data
+# Declaring array
 array:  .space          40
-
+# Declaring String Prompts
 input_prompt:
     .asciiz         "Enter 10 integers : \n"
 output_prompt:
     .asciiz         "Sorted Array : \n"
 tab:
     .asciiz         "  "
-
 
     .text
     .globl main
