@@ -98,13 +98,7 @@ main:
     li      $a1, 9                  # $a1 <-- 9, end = 0
     jal		recursive_search	    # jump to recursive_search and save position to $ra
     
-    
-    # # pushing index on stack to use later
-    # move    $a0, $v0                # $v0 <-- $a0,  $a0 = index
-    # # li      $v0, 1
-    # # syscall
-    # jal     pushToStack             # push value of index on top of stack
-
+    # Storing index
     move    $s2, $v0                # $s2 <-- $v0, storing answer index in $s2
 
     move    $a0, $s0                # storing key into first argument register  
