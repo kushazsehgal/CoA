@@ -1,6 +1,6 @@
 ###################################################################
 # Assignment 4 CS39001
-# Q2. Sort an array of 10 integers using a recusrive algorithm
+# Q3. Implement a searching algorithm in an array of 10 integers
 # Team Details - Group 70
 # Kushaz Sehgal     20CS30030
 # Jay Kumar Thakur  20CS30024
@@ -14,8 +14,13 @@ input_prompt:
     .asciiz         "Enter 10 integers : \n"
 output_prompt:
     .asciiz         "Sorted Array : \n"
+key_prompt:
+    .asciiz         "\nEnter key : "
+key_output:
+    .asciiz         "Key is at index : "
 tab:
     .asciiz         "  "
+
 
     .text
     .globl main
@@ -25,6 +30,7 @@ tab:
 # array = A
 # $t0 = i
 # $t1 = offset for ith element (4*i)
+# $s0 = key
 
 main:
     # initialising Stack Frame
@@ -42,7 +48,7 @@ main:
 
         li      $v0, 5                  # system call to read integer
         syscall
-        sw      $v0, array($t1)         # v0 --> array($t1) , A[i] = $v0     
+        sw      $v0, array($t1)         # array($t1) <-- $v0 , A[i] = $v0     
 
         addi    $t0, $t0 ,1             # incrementing i (i = i + 1)
         addi    $t1, $t1 ,4             # t1 <-- t1 + 4 , t1 now is offset for A[i+1]
@@ -75,6 +81,36 @@ main:
         b       print_integers
     end_print_integers: 
 
+    # prompt for entering key
+    la		$a0, key_prompt		    # storing key_prompt string into first argument register
+    li      $v0,4                   # system call to print string (printing key_prompt)
+    syscall
+               
+    # li      $v0, 5                  # system call to read integer
+    # syscall
+    # move    $s0, $v0                # $s0 <-- $v0 , $s0 = key
+
+    # # calling recursive_search(A,0,9)
+    # li      $a0, 0                  # $a0 <-- 0 ,start = 0
+    # li      $a1, 9                  # $a1 <-- 9 ,end = 0
+    # jal		recursive_search	    # jump to recursive_search and save position to $ra
+    
+    # # pushing index on stack to use later
+    # move    $a0, $v0                # $v0 <-- $a0 , $a0 = index
+    # jal     pushToStack             # push value of index on top of stack
+
+    # # printing key_output
+    # la      $a0, key_output        # storing key_output string into first argument register
+    # li      $v0, 4                 # system call to print string (printing key_output)
+    # syscall
+
+    
+    # jal     popFromStack           # popping value of index
+    # move    $a0, $v0               # $a0 <-- $v0 ,storing popped value in $a0 ($a0 = index)
+
+    # li      $v0, 1                 # syscall to print integer ,printing index
+    # syscall
+
     ###############################################
     # Resetting stack frame and terminating program
     ###############################################
@@ -103,9 +139,9 @@ recursive_sort:
     jal     pushToStack               # pushing $ra to top of stack
     move    $a0, $t9                  # $a0 <-- $t9, restoring value of $t9
 
-    move    $t0, $a0                 # $t0 <-- $a0 ,initialising p = left 
-    move    $t1, $a0                 # $t1 <-- $a0 ,initialising l = left
-    move    $t2, $a1                 # $t2 <-- $a1 ,initialising r = right
+    move    $t0, $a0                  # $t0 <-- $a0 ,initialising p = left 
+    move    $t1, $a0                  # $t1 <-- $a0 ,initialising l = left
+    move    $t2, $a1                  # $t2 <-- $a1 ,initialising r = right
 
     # Program Variables - 
     # $t3 = address of A[p]
@@ -150,7 +186,7 @@ recursive_sort:
         end_innerloop2:
 
         blt		$t1, $t2, swap_l_r      # if $t1 < $t2 then go to swap_l_r (branch if l < r)
-        
+
         recursive_calls:
         lw		$t6, array($t3)		    # $t6 <-- array[$t3] basically $t6 = A[p]
         lw      $t8, array($t5)         # $t8 <-- array[$t5] basically $t8 = A[r]
@@ -174,7 +210,7 @@ recursive_sort:
         addi    $a1, $t2, -1		    # $a1 = $t2 - 1 , setting second argument  = r - 1
         # $a0 = left already
         jal		recursive_sort		    # jump to recursive_sort and save position to $ra
-        
+                
         # restoring value of $t2 as r and popping r from stack
         jal		popFromStack			# popping value of r from stack
         move    $t2, $v0                # $t2 <-- $v0 , $t2 = r ,restored $t2
@@ -187,7 +223,7 @@ recursive_sort:
         # $a1 set to right earlier
         jal     recursive_sort          # jump to recursive_sort and save position to $ra
         
-        b		end_recursive_sort		# branch to end_recursive_sort (returning from recursive_sort)
+        b		end_recursive_sort	    # branch to end_recursive_sort (returning from recursive_sort)
         
         swap_l_r:
             lw		$t7, array($t4)		    # $t7 <-- array[$t4] basically $t7 = A[l]
@@ -215,6 +251,14 @@ recursive_sort:
  
         jr      $ra                     # return control to caller function 
 
+# recursive_search - Program Variables:
+# $s0 = key
+# $a0 = start
+# $a1 = end
+# $t1 = mid1
+# $t2 = mid2
+# recursive_search:
+#     initStack
 
 
 
