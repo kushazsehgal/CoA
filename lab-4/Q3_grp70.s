@@ -17,7 +17,9 @@ output_prompt:
 key_prompt:
     .asciiz         "\nEnter key : "
 key_output:
-    .asciiz         "Key is at index (0-indexing): "
+    .asciiz         " is FOUND in the array at index (0-indexing): "
+key_failure:
+    .asciiz         " not FOUND in the array."
 tab:
     .asciiz         "  "
 
@@ -31,6 +33,7 @@ tab:
 # $t0 = i
 # $t1 = offset for ith element (4*i)
 # $s0 = key
+# $s2 = final answer
 
 main:
     # initialising Stack Frame
@@ -96,24 +99,38 @@ main:
     jal		recursive_search	    # jump to recursive_search and save position to $ra
     
     
-    # pushing index on stack to use later
-    move    $a0, $v0                # $v0 <-- $a0,  $a0 = index
-    # li      $v0, 1
-    # syscall
-    jal     pushToStack             # push value of index on top of stack
+    # # pushing index on stack to use later
+    # move    $a0, $v0                # $v0 <-- $a0,  $a0 = index
+    # # li      $v0, 1
+    # # syscall
+    # jal     pushToStack             # push value of index on top of stack
 
-    # printing key_output
-    la      $a0, key_output        # storing key_output string into first argument register
-    li      $v0, 4                 # system call to print string (printing key_output)
+    move    $s2, $v0                # $s2 <-- $v0, storing answer index in $s2
+
+    move    $a0, $s0                # storing key into first argument register  
+    li      $v0, 1                  # system call to print integer (print key)
     syscall
 
+    beq       $s2, -1, failure      # if index == -1, key not found, so branch to failure
     
-    jal     popFromStack           # popping value of index
-    move    $a0, $v0               # $a0 <-- $v0, storing popped value in $a0 ($a0 = index)
-
-    li      $v0, 1                 # syscall to print integer, printing index
+    success:
+    # printing key_output
+    la      $a0, key_output         # storing key_output string into first argument register
+    li      $v0, 4                  # system call to print string (printing key_output)
     syscall
+    move    $a0, $s2                # $a0 <-- $s2, storing index into first argument register
+    li      $v0, 1                  # syscall to print integer, printing index
+    syscall
+    b       final
 
+    failure:
+    # printing key_failure
+    la      $a0, key_failure        # storing key_output string into first argument register
+    li      $v0, 4                  # system call to print string (printing key_output)
+    syscall
+    b       final                   # branch to exit block
+    
+    final:
     ###############################################
     # Resetting stack frame and terminating program
     ###############################################
