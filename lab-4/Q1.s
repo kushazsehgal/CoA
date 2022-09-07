@@ -1,4 +1,7 @@
-    .data
+############################################
+
+############################################
+.data
 i1: .asciiz "Enter four positive integers n, a, r and m :\n"
 o1: .asciiz "Matrix A :\n\n"
 o2: .asciiz "Final determinant of the matrix A is : "
