@@ -1,6 +1,12 @@
-############################################
+###################################################################
+# Assignment 4 CS39001
+# Q1. Determinant of a matrix using a recusrive algorithm
+# Team Details - Group 70
+# Kushaz Sehgal     20CS30030
+# Jay Kumar Thakur  20CS30024
+###################################################################
 
-############################################
+
 .data
 i1: .asciiz "Enter four positive integers n, a, r and m :\n"
 o1: .asciiz "Matrix A :\n\n"
