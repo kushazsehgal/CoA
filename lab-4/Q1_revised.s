@@ -55,76 +55,59 @@ main:
     la      $a0, o2
     syscall                 # determinant output prompt
 
-    li      $v0, 1
-    move    $a0, $s0
-    syscall                 ###
-
     move    $a0, $s0
     move    $a1, $s3
     jal     Determinant     # determinant function call
 
-    # ##################
-    # li      $v0, 4
-    # la      $a0, i1
-    # syscall  
-    ##################
-
     move    $s4, $v0        # s4 = value of determinant
     
-
     li      $v0, 1
     move    $a0, $s4
     syscall                 # determinant value printing
 
     li      $v0, 4
     la      $a0, nl
-    syscall
+    syscall                 # cout << endl
 
     mul     $t0, $s0, $s0
     mul     $t0, $t0, 4
-    add     $sp, $sp, $t0
+    add     $sp, $sp, $t0   # deallocating matrix A
 
-    b	    exit
+    b	    exit            # safely terminate the program
 
 FillMatrix:
 	move    $t3, $s3  # $t3 <-- Address of Matrix
-	move    $t0, $zero  # $t0 <-- 0
+	move    $t0, $zero  # $t0 <-- 0 (current index pointer)
 	move    $t1, $s1 # $t1 <-- a
 	mul     $t2, $s0, $s0 # $t2 <-- ending point index (n*n) 
 	
   assign_loop:
-	beq     $t0, $t2, assign_loop_end
-	b       assign
+	beq     $t0, $t2, assign_loop_end # if(current idx == end pointer) end the loop
 	
-  assign_loop_end:
-	j		$ra	
+  assign: # else come to assign loop
+	sw      $t1, 0($t3) # store the surrent gp term to the memory
 
-  assign:
-	sw      $t1, 0($t3)
+	addi	$t3, 4      # increasing the current pointer
+	addi    $t0, 1      # moving the current pointer by one
 
-	addi	$t3, 4
-	addi    $t0, 1
-
-	mul 	$t1, $t1, $s2	
+	mul 	$t1, $t1, $s2	 # t1 = t1 * r % m
 	div		$t1, $s5			
 	mfhi	$t1					
 			
 	b		assign_loop			# branch to loop
 
+  assign_loop_end:
+	j		$ra	
 
 PrintMatrix:
 	move    $t3, $s3  # $t3 <-- Address of A
 	mul     $t2, $s0, $s0 # $t2 <-- ending point index (n*n) 
-	move    $t0, $zero  # $t0 <-- 0
+	move    $t0, $zero  # $t0 <-- 0 current pointer
 
   print_loop:
-	beq     $t0, $t2, print_loop_end
-	b		print
-	
-  print_loop_end:
-	j		$ra	
+	beq     $t0, $t2, print_loop_end  # if current pointer == end pointer end the loop
 
-  print:
+  print: # else print the respective element
 	li		$v0, 1
 	lw		$a0, 0($t3)
 	syscall
@@ -132,22 +115,24 @@ PrintMatrix:
 	addi	$t3, 4
 	addi    $t0, 1
 
-	div		$t0, $s0			# $t0 / $t1
-	mfhi	$t4					# $t3 = $t0 mod $t1 
+	div		$t0, $s0			
+	mfhi	$t4					
 	
-	beq		$t4, $zero, NewLine
+	beq		$t4, $zero, NewLine # if one row has printed then print a new line 
     
-    Space:
+    Space: # else print a space for the next character
         la  $a0, sp
-
+        b	PrintChar
+    NewLine:
+        la  $a0, nl
     PrintChar:
         li	$v0, 4
         syscall
         b	print_loop
         
-    NewLine:
-        la  $a0, nl
-        b	PrintChar
+  
+  print_loop_end:
+	j		$ra	
 	
 Determinant:
     move    $t0, $ra    # store $ra temporarily
@@ -176,7 +161,7 @@ Determinant:
     # allocate memory for A'
     addi    $t0, $s0, -1    # $t0 = n - 1
     mul     $a0, $t0, $t0   # $a0 = (n-1)*(n-1)
-    jal     mallocInStack   # call mallocInStack with argument n*n
+    jal     mallocInStack   # call mallocInStack with argument n-1*n-1
     move    $s3, $v0        # store return value, i.e. base address of A' in $s3
 
     li      $s4, 0      # initialise current sum to 0
@@ -184,10 +169,7 @@ Determinant:
 
     bgt     $s0, 1, RFC # if(n > 1) recursive function call
 
-Determinant_base_case:
-    # li      $v0, 4
-    # la      $a0, i1
-    # syscall  
+Determinant_base_case: 
     lw      $s4, 0($s1)     # for n=1 answer is the single matrix element itself
 
 Determinant_return:
@@ -218,96 +200,87 @@ Determinant_return:
     lw      $fp, 0($sp)     # restore frame pointer
     addi    $sp, $sp, 4     # restore stack pointer
 
-    #################
-    li      $v0, 4
-    la      $a0, i1
-    syscall  
-    #################
-
     jr      $ra             # return
 
 Cofactor_Matrix: # (n, A, col, A')
     move    $t0, $s0
-    move    $t1, $zero # col
-    addi    $t2, $zero, 1 # row
-    move    $t4, $s3
-  cofactor_loop:
-    beq     $t1, $t0, cofactor_loop_end
-    beq     $t1, $s2, col_increment_and_loop
-    cofector_inner_loop:
-      beq   $t2, $t0, col_increment_and_loop
-      mul   $t3, $t2, $t0
-      add   $t3, $t3, $t1
-      mul   $t3, $t3, 4
-      add   $t3, $t3, $s1
-      lw    $t3, 0($t3)
-      sw    $t3, 0($t4)
-      addi  $t4, $t4, 4
-      addi  $t2, $t2, 1
-      b		cofector_inner_loop
+    move    $t1, $zero          # col = 0
+    addi    $t2, $zero, 1       # row = 0
+    move    $t4, $s3            # t4 <-- address of the cofactor matrix
+  cofactor_loop:                # loop on col
+    beq     $t1, $t0, cofactor_loop_end         # if col value becomes n then we end the loop
+    beq     $t1, $s2, col_increment_and_loop    # if col value equals the specified cofactor value then we skip the computation and run the loop
+    cofector_inner_loop:        # loop on row
+      beq   $t2, $t0, col_increment_and_loop    # if row value becomes n then we return to the outer loop
+      mul   $t3, $t2, $t0                       
+      add   $t3, $t3, $t1       # t3 = row * n + col
+      mul   $t3, $t3, 4         # t3 *= 4
+      add   $t3, $t3, $s1       # t3 <-- address of A[row][col]
+      lw    $t3, 0($t3)         # t3 <-- A[row][col]
+      sw    $t3, 0($t4)         # store the value of t3 to the cofactor matrix
+      addi  $t4, $t4, 4         # increase the cofactor matrix pointer
+      addi  $t2, $t2, 1         # row++
+      b		cofector_inner_loop # goto the inner loop
     col_increment_and_loop:
-      li    $t2, 1
-      addi  $t1, $t1, 1
-      b     cofactor_loop
+      li    $t2, 1              # row = 1
+      addi  $t1, $t1, 1         # col++
+      b     cofactor_loop       # goto cofactor_loop
   cofactor_loop_end:
     jr      $ra
 
 RFC:
-    #################
-    # li      $v0, 4
-    # la      $a0, i1
-    # syscall  
-    #################
     move    $s2, $zero # current coloumn
   RFC_loop:
-    beq     $s2, $s0, Determinant_return
-    jal     Cofactor_Matrix
-    addi    $a0, $s0, -1
-    move    $a1, $s3
-    jal     Determinant
-    mul     $t0, $s2, 4
-    add     $t1, $s1, $t0
-    lw      $t0, 0($t1)
-    mul     $t1, $t0, $v0
-    mul     $t1, $t1, $s5
-    mul     $s5, $s5, -1
-    add     $s4, $s4, $t1  
-    addi    $s2, $s2, 1  
-    b		RFC_loop
+    beq     $s2, $s0, Determinant_return # if the current coloumn reaches the end then we simply return the determinant value
+    
+    jal     Cofactor_Matrix # calling the cofactor matrix function 
 
-sanity_check:
+    addi    $a0, $s0, -1    # a0 = n-1
+    move    $a1, $s3        # a1 = address of the cofactor matrix
+    jal     Determinant     # calculate the determinant of the cofactor
+    mul     $t0, $s2, 4     
+    add     $t1, $s1, $t0
+    lw      $t0, 0($t1)     # t0 <-- value at A[0][col]
+    mul     $t1, $t0, $v0   # t1 <-- t0 * det(cofactor matrix)
+    mul     $t1, $t1, $s5   # t1 <-- t1 * sign
+    mul     $s5, $s5, -1    # reversing the sign
+    add     $s4, $s4, $t1   # sum = sum + t1
+    addi    $s2, $s2, 1     # col++
+    b		RFC_loop        # run the loop again
+
+sanity_check:               # check if all the given inputs are greater than zero or not
     ble     $s0, $zero, error
 	ble     $s1, $zero, error
 	ble     $s2, $zero, error
 	ble		$s5, $zero, error
 	j		$ra
 
-initStack:
+initStack:                  # store the old frame pointer in the stack
     addi    $sp, $sp, -4
     sw      $fp, 0($sp)
     move 	$fp, $sp
     jr      $ra
 
-mallocInStack:
+mallocInStack:              # assign a specified amount of memory for storing an array and return its address in $v0
     mul     $a0, $a0, 4
     sub     $sp, $sp, $a0
     move    $v0, $sp
     jr      $ra
 
-pushToStack:
+pushToStack:                # push the specified element to the stack
     addi    $sp, $sp, -4
     sw      $a0, 0($sp)
     jr      $ra
 
-popFromStack:
+popFromStack:               # pop element from the stack and return its value in $v0
     lw      $v0, 0($sp)
-    add     $s0, $sp, 4
+    add     $sp, $sp, 4
     jr      $ra
 
 error:
     li      $v0, 4
     la      $a0, e1
-    syscall
+    syscall             # print the error message and go to main for taking the values again
     b		main
 
 exit:
