@@ -1,3 +1,13 @@
+`timescale 1ns / 1ps
+////////////////////////////////////////////////////////
+// Assignment 6 - CS31001
+// extends the sign of the input signals
+// Team Details - 
+// Kushaz Sehgal - 20CS30030
+// Jay Kumar Thakur - 20CS30024
+////////////////////////////////////////////////////////
+
+
 // Sign extend module for shift amount and immediate value
 module immediate_sign_extend (
     input [5:0] OP_CODE,
