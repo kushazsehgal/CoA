@@ -9,7 +9,7 @@
 
 // The jump control block for determining if a jump is valid or not depending on flags from the ALU
 module jump_control (
-    input [5:0] opcode,
+    input [5:0] OP_CODE,
     input sign,
     input carry,
     input zero,
@@ -17,7 +17,7 @@ module jump_control (
 );
     
     always @(*) begin
-        case (opcode)
+        case (OP_CODE)
             6'b001011 : begin           // bltz
                 if (sign && !zero)
                     validJump = 1;
