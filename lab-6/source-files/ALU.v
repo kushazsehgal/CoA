@@ -12,7 +12,7 @@ module ALU (
     input signed [31:0] a, 
     input signed [31:0] b, 
     input ALUsel, 
-    input [5:0] ALUop, 
+    input [4:0] ALUop, 
     output reg carry, 
     output reg zero, 
     output reg sign, 
@@ -29,7 +29,42 @@ module ALU (
     assign xor_output = input1 ^ input2;
 
     Adder_32_bit add(.a(input1),.b(input2),.c_in(0),.sum(add_output),.c_out(carry_buffer));
-    
+    Shifter shift(.in(input1),.shamt(input2),.direction(ALUop[1]),.a_OR_l(ALUop[0]),.out(shift_output));
+
+    always @(*) begin
+        if (ALUop == 6'b00000) begin
+            result = input1;
+        end
+        else if (ALUop == 6'b00001) begin
+            result = add_output;
+            carry = carry_buffer;
+        end
+        else if (ALUop == 6'b00101) begin
+            result = add_output;
+        end
+        else if (ALUop == 6'b00010) begin
+            result = xor_output;
+        end
+        else if (ALUop == 6'b00011) begin
+            result = and_output;
+        end
+        else if (ALUop == 6'b01001) begin
+            result = add_output;
+        end
+        else if (ALUop[4:2] == 3'b100) begin
+            result = shift_output
+        end
+    end
+
+        always @(result) begin
+            if (!result) begin
+                zero = 1'b1
+            end
+            else begin
+                zero = 1'b00000
+            end
+            sign = result[31]
+        end
 
 
 endmodule
