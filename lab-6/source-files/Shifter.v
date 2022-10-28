@@ -1,14 +1,14 @@
 `timescale 1ns / 1ps
 ////////////////////////////////////////////////////////
 // Assignment 6 - CS31001
-// Decodes 32 bit instruction into separate fields
+// Implements Shift Module
 // Team Details - 
 // Kushaz Sehgal - 20CS30030
 // Jay Kumar Thakur - 20CS30024
 ////////////////////////////////////////////////////////
 
 // Module to implement shift operations for the ALU
-module shifter(
+module Shifter(
     input signed [31:0] in, 
     input [31:0] shamt, 
     input direction, 

@@ -1,14 +1,14 @@
 `timescale 1ns / 1ps
 ////////////////////////////////////////////////////////
 // Assignment 6 - CS31001
-// Decodes 32 bit instruction into separate fields
+// Module to Checks Validity of Jump
 // Team Details - 
 // Kushaz Sehgal - 20CS30030
 // Jay Kumar Thakur - 20CS30024
 ////////////////////////////////////////////////////////
 
 // The jump control block for determining if a jump is valid or not depending on flags from the ALU
-module jump_control (
+module Jump_Control (
     input [5:0] OP_CODE,
     input sign,
     input carry,
