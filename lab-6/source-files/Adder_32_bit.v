@@ -10,7 +10,7 @@ module Adder_32_bit(
     input [31:0]a,
     input [31:0]b,
     input c_in,
-    output [31:0]sum
+    output [31:0]sum,
     output c_out
 );
     wire c_out_temp;

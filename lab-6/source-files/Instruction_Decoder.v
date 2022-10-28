@@ -7,7 +7,7 @@
 // Jay Kumar Thakur - 20CS30024
 ////////////////////////////////////////////////////////
 
-module instruction_decode (
+module Instruction_Decoder (
     input [31:0] instruction,
     output [5:0] opcode,
     output [5:0] func,
