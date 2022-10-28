@@ -7,7 +7,7 @@
 // Jay Kumar Thakur - 20CS30024
 ////////////////////////////////////////////////////////
 
-module control_unit(
+module Control_Unit(
     input [5:0]OP_CODE,
     input [5:0]FUNC_CODE,
     output [1:0]RegDst,

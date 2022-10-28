@@ -9,7 +9,7 @@
 
 
 // Sign extend module for shift amount and immediate value
-module immediate_sign_extend (
+module Immediate_Sign_Extend (
     input [5:0] OP_CODE,
     input [5:0] FUNC_CODE,       
     input [15:0] instr,
