@@ -9,8 +9,8 @@
 
 module Instruction_Decoder (
     input [31:0] instruction,
-    output [5:0] opcode,
-    output [5:0] func,
+    output [5:0] OP_CODE,
+    output [5:0] FUNC_CODE,
     output [25:0] label0,
     output [15:0] label1,
     output [4:0] rs,
@@ -19,8 +19,8 @@ module Instruction_Decoder (
     output [15:0] imm
 );
 
-    assign opcode = instruction[31:26];     // Opcode
-    assign func = instruction[5:0];         // Function code
+    assign OP_CODE = instruction[31:26];     // OP_CODE
+    assign FUNC_CODE = instruction[5:0];         // FUNC_CODEtion code
     assign label0 = instruction[25:0];      // Jump address for 26-bit addresses
     assign label1 = instruction[15:0];      // Jump address for 16-bit addresses
     assign rs = instruction[25:21];         // Register rs

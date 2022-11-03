@@ -8,7 +8,7 @@
 // Jay Kumar Thakur - 20CS30024
 ////////////////////////////////////////////////////////
 
-module program_counter (
+module Program_Counter (
     input [31:0] nextInstrAddr,
     input clk, 
     input rst,
