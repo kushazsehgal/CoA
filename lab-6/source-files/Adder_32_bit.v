@@ -6,6 +6,7 @@
 // Kushaz Sehgal - 20CS30030
 // Jay Kumar Thakur - 20CS30024
 ////////////////////////////////////////////////////////
+
 module Adder_32_bit(
     input [31:0]a,
     input [31:0]b,
