@@ -3,6 +3,7 @@ import regex as re
 import argparse
 import os
 
+initial_string = "memory_initialization_radix=2;\nmemory_initialization_vector=\n"
 OP_CODE = {
     "add": 0, "comp": 0,
     "diff": 0,"and": 1,
@@ -180,8 +181,16 @@ def main(source_file, output_file):
             PC = PC + 4
 
     with open(output_file, 'w') as f:
-        for instr in instructs:
-            f.write(instr + '\n')
+        f.write(initial_string)
+        for i in range(len(instructs)):
+            f.write(instructs[i] + ',' + '\n')
+            # if i != len(instructs) - 1:
+            #     f.write(instructs[i] + ',' + '\n')
+            # else:
+            #     f.write(instructs[i] + ';' + '\n')
+        f.write("1"*32 + ";")
+        # for instr in instructs:
+        #     f.write(instr + '\n')
 
 
 if __name__ == "__main__":
