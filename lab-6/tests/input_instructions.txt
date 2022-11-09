@@ -31,6 +31,7 @@ fori:
 found: 
     xor $19, $19
     add $19, $8         # store the index where key is found in $19
+    sw  $19, 0($25)
     b exit
 
 notFound:
@@ -40,9 +41,3 @@ notFound:
 exit:
     xor $16, $16
     addi $16, 1         # to indicate completion
-
-
-
-
-
-
